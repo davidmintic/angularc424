@@ -1,0 +1,29 @@
+<div class="cls-container-programas p-3 mb-5">
+
+
+    <div class="d-flex flex-wrap" id="idElementoPrueba">
+
+        <div *ngFor="let p of listaProgramasEnOferta" class="card p-2 m-2" style="width: 18rem;">
+            <img src="{{p.imagen}}" class="card-img-top" alt="...">
+
+            <div class="card-body">
+                <h6>{{p.nombre}}</h6>
+                <p class="card-text">
+                    {{p.descripcion}}
+                </p>
+                <div>
+                    <span>{{p.tipo}}</span>
+                    <a class="cls-link-inscribir">Incribirse</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+</div>
