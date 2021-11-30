@@ -4,6 +4,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { GlobalService } from '../servicios/global.service';
 import { BackendSevicioService } from '../servicios/backend-sevicio.service';
+import Swal from 'sweetalert2';
 
 @Component(
   {
@@ -64,22 +65,46 @@ export class LoginComponent implements OnInit {
 
     const credenciales = this.formLogin.getRawValue();
 
-    this.servicioBackend.validUser('/usuarios', JSON.stringify(credenciales)).subscribe(
+    this.servicioBackend.validUser(JSON.stringify(credenciales)).subscribe(
       (response) => {
 
         if (response) {
 
-          if (response.length > 0) {
-            alert('Felicidades');
+          if (response.tk) {
+
+            Swal.fire({
+              title: 'Felicidades',
+              text: 'Has creado un nuevo usuario',
+              icon: 'success',
+              confirmButtonText: 'Cool'
+            });
+            localStorage.setItem('tkedufre', response.tk);
+            this.servicioBackend.token = response.tk;
+            this.servicioBackend.isAutenticate = true;
+
+            this.router.navigate(['/admin-usuarios']);
+
           } else {
             alert('Las credenciales son incorrectas');
+
           }
         } else {
           alert('Ups ocurrió un error');
-        }  
+        }
       },
       (error) => {
         console.log('error');
+
+        if (error.status == 401) {
+
+          Swal.fire({
+            title: 'Datos no válidos',
+            text: 'Revisa que hayas escritos bien tus datos',
+            icon: 'error',
+            confirmButtonText: 'Cool'
+          });
+        }
+
       },
       () => {
         console.log('se completó');

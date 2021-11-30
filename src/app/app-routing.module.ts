@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminUsuarioComponent } from './admin-usuario/admin-usuario.component';
+import { AdminUsuariosComponent } from './admin-usuarios/admin-usuarios.component';
 import { LoginComponent } from './login/login.component';
 import { ProgramasEnOfertaComponent } from './programas-en-oferta/programas-en-oferta.component';
 
@@ -14,8 +14,8 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'admin-usuario',
-    component: AdminUsuarioComponent
+    path: 'admin-usuarios',
+    component: AdminUsuariosComponent
   },
   {
     path: 'programas-en-oferta',

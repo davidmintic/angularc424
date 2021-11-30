@@ -8,22 +8,86 @@ import { Observable } from 'rxjs';
 export class BackendSevicioService {
 
   urlBackend = "http://localhost:3000";
+  token: string = '';
+  isAutenticate = false;
 
-  constructor(private http: HttpClient) { }
-
-  getDatos(ruta: string): Observable<any> {
-    return this.http.get(this.urlBackend + ruta);
+  constructor(private http: HttpClient) { 
+    this.cargarToken();
   }
 
 
-  validUser(ruta: string, credenciales: string): Observable<any> {
+  cerrarSesion(){
+    this.token = '';
+    this.isAutenticate = false;
+    localStorage.removeItem('tkedufre');
+  }
 
-    // const headers = new HttpHeaders({'Content-Type':'application/json; charset=utf-8'});
 
-    const url = this.urlBackend + ruta + '?filter=' + encodeURIComponent('{ "where" : ' + credenciales + "}");
+  cargarToken(){
+   const token = localStorage.getItem('tkedufre');
+    if(token) {
+      this.token = token;
+      this.isAutenticate = true;
+    }
+
+  }
+
+  getDatos(ruta: string): Observable<any> {
+
+
     return this.http.get(
-      url     
+      this.urlBackend + ruta,
+      {
+        headers: new HttpHeaders(
+          {
+            'Authorization': `Bearer ${this.token}`        
+          }
+        )
+      }
     );
+  }
+
+
+  postDatos(ruta: string, datos: string): Observable<any> {
+
+    return this.http.post(this.urlBackend + ruta,
+      datos,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      }
+    )
+  }
+
+
+  validUser(credenciales: string): Observable<any> {
+
+    // const url = this.urlBackend + ruta + '?filter=' + encodeURIComponent('{ "where" : ' + credenciales + "}");
+    const url = this.urlBackend + '/login';
+    return this.http.post(
+      url,
+      credenciales,
+      {
+        headers: new HttpHeaders(
+          {
+            'Content-Type': 'application/json'
+          }
+        )
+      }
+    );
+
+
+
+
+
+    // const token = '';
+    // var headersObject = new HttpHeaders({
+    //   'Content-Type': 'application/json; charset=utf-8',
+    //   'Authorization': "Bearer " + token
+    // });
+
+    // const httpOptions = {
+    //   headers: headersObject
+    // };
 
   }
 
