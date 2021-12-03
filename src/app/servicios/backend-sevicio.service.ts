@@ -11,21 +11,21 @@ export class BackendSevicioService {
   token: string = '';
   isAutenticate = false;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this.cargarToken();
   }
 
 
-  cerrarSesion(){
+  cerrarSesion() {
     this.token = '';
     this.isAutenticate = false;
     localStorage.removeItem('tkedufre');
   }
 
 
-  cargarToken(){
-   const token = localStorage.getItem('tkedufre');
-    if(token) {
+  cargarToken() {
+    const token = localStorage.getItem('tkedufre');
+    if (token) {
       this.token = token;
       this.isAutenticate = true;
     }
@@ -40,7 +40,7 @@ export class BackendSevicioService {
       {
         headers: new HttpHeaders(
           {
-            'Authorization': `Bearer ${this.token}`        
+            'Authorization': `Bearer ${this.token}`
           }
         )
       }
@@ -53,7 +53,46 @@ export class BackendSevicioService {
     return this.http.post(this.urlBackend + ruta,
       datos,
       {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers: new HttpHeaders(
+          {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        )
+      }
+    )
+  }
+
+
+  
+  patchDatos(ruta: string, id: string, datos: string): Observable<any> {
+
+    return this.http.patch(
+      this.urlBackend + ruta + '/' + id,
+      datos,
+      {
+        headers: new HttpHeaders(
+          {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        )
+      }
+    )
+  }
+
+
+  deleteDatos(ruta: string, id: string): Observable<any> {
+
+    return this.http.delete(
+      this.urlBackend + ruta + '/' + id,
+      {
+        headers: new HttpHeaders(
+          {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+          }
+        )
       }
     )
   }

@@ -38,6 +38,9 @@ export class AdminUsuariosComponent implements OnInit {
   selectTipoUsuario = 'Estudiante';
   listaUsuarios: any[] = [];
 
+  modoCrud = 'adicion';
+  idActual = '';
+
 
   constructor(
     private servicioGlobal: GlobalService,
@@ -70,10 +73,10 @@ export class AdminUsuariosComponent implements OnInit {
   obtenerUsuarios(): void {
     this.servicioBackend.getDatos('/usuarios').subscribe({
       next: (datos) => {
-          this.listaUsuarios = datos;
+        this.listaUsuarios = datos;
       },
       error: () => {
-       
+
       },
 
       complete: () => {
@@ -84,16 +87,12 @@ export class AdminUsuariosComponent implements OnInit {
   }
 
 
+  iniciarCreacion(): void {
+    this.openNewUser = !this.openNewUser;
+    this.modoCrud = 'adicion';
+  }
 
   crearUsuario(): void {
-
-
-    // Swal.fire({
-    //   title: 'Error!',
-    //   text: 'Do you want to continue',
-    //   icon: 'error',
-    //   confirmButtonText: 'Cool'
-    // })
 
     const usuario = this.formUsuario.getRawValue();
     usuario.tipo = this.selectTipoUsuario;
@@ -126,6 +125,80 @@ export class AdminUsuariosComponent implements OnInit {
 
     );
 
+  }
+
+
+  iniciarEdicion(usuario: any): void {
+    this.idActual = usuario.id;
+    this.formUsuario.patchValue(usuario);
+    this.openNewUser = true;
+    this.modoCrud = 'edicion';
+  }
+
+  editarUsuario(): void {
+
+    const usuarioModificado = this.formUsuario.getRawValue();
+
+    this.servicioBackend.patchDatos('/usuarios', this.idActual, usuarioModificado).subscribe(
+      {
+        next: (respuesta) => {
+          console.log(respuesta);
+
+          Swal.fire({
+            title: 'Felicidades',
+            text: 'Has editado un nuevo usuario',
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
+          this.obtenerUsuarios();
+        },
+        error: () => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'No se pudo editar',
+            icon: 'error',
+            confirmButtonText: 'Cool'
+          });
+        },
+
+        complete: () => {
+
+        }
+      }
+    );
+
+  }
+
+
+  eliminarUsuario(id: string) {
+    
+    this.servicioBackend.deleteDatos('/usuarios', id).subscribe(
+      {
+        next: (respuesta) => {
+          console.log(respuesta);
+
+          Swal.fire({
+            title: '!!!',
+            text: 'Has eliminado al usuario',
+            icon: 'success',
+            confirmButtonText: 'Cool'
+          });
+          this.obtenerUsuarios();
+        },
+        error: () => {
+          Swal.fire({
+            title: 'Error!',
+            text: 'No se pudo eliminar',
+            icon: 'error',
+            confirmButtonText: 'Cool'
+          });
+        },
+
+        complete: () => {
+
+        }
+      }
+    );
   }
 
 

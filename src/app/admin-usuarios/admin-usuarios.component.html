@@ -1,10 +1,10 @@
 <div class="p-5">
 
-    <section class="mb-4">
+    <!-- <section class="mb-4">
         <h3>Bienvenido al administrador de usuarios</h3>
-    </section>
-    <section class="mb-4 d-flex flex-row">
-        <button type="button" (click)="openNewUser = !openNewUser" class="btn btn-warning me-2 cls-button-crud">Crear
+    </section> -->
+    <section class="mb-4 d-flex flex-row" style="position: relative;">
+        <button type="button" (click)="iniciarCreacion()" class="btn btn-warning me-2 cls-button-crud">Crear
             usuario</button>
 
         <select name="" id="" [(ngModel)]="selectTipoUsuario" class="form-select cls-select-filter"
@@ -15,6 +15,10 @@
             </option>
 
         </select>
+
+        <div class="mb-3 me-3 cls-buscar">
+            <input type="text" class="form-control" placeholder="Buscar" aria-describedby="emailHelp">
+        </div>
 
     </section>
 
@@ -35,8 +39,12 @@
                 <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
             </div>
 
-            <button [disabled]="!formUsuario.valid" type="submit" class="btn btn-primary"
-                (click)="crearUsuario()">Guardar</button>
+            <button *ngIf="modoCrud == 'adicion'" [disabled]="!formUsuario.valid" type="submit"
+                class="btn btn-warning cls-boton-guardar" (click)="crearUsuario()"><i class="fa fa-plus"></i> Guardar adición</button>
+
+            <button *ngIf="modoCrud == 'edicion'" [disabled]="!formUsuario.valid" type="submit"
+                class="btn btn-primary cls-boton-guardar" (click)="editarUsuario()"><i class="fa fa-pencil"></i> Guardar edición</button>
+
         </form>
     </section>
 
@@ -70,8 +78,11 @@
                         {{usuario.codigo}}
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary me-2">Editar</button>
-                        <button type="button" class="btn btn-primary">Eliminar</button>
+                        <button type="button" class="btn btn-primary me-2" (click)="iniciarEdicion(usuario)">
+                            Editar
+                        </button>
+                        <button type="button" class="btn btn-danger"
+                            (click)="eliminarUsuario(usuario.id)">Eliminar</button>
                     </td>
                 </tr>
 
