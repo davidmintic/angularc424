@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Md5 } from 'ts-md5/dist/md5';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { GlobalService } from '../servicios/global.service';
-import { BackendSevicioService } from '../servicios/backend-sevicio.service';
+import { GlobalService } from '../../servicios/global.service';
+import { BackendSevicioService } from '../../servicios/backend-sevicio.service';
 import Swal from 'sweetalert2';
 
 @Component(
@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit {
       contrasenia: ['', Validators.required]
     });
 
+    this.servicioGlobal.rutaActual = 'login';
+
   }
 
   ngOnInit(): void {
@@ -73,16 +75,16 @@ export class LoginComponent implements OnInit {
           if (response.tk) {
 
             Swal.fire({
-              title: 'Felicidades',
-              text: 'Has creado un nuevo usuario',
+              title: 'Bienvenido',
+              text: 'Has iniciado sesión',
               icon: 'success',
-              confirmButtonText: 'Cool'
+              confirmButtonText: 'Ok'
             });
             localStorage.setItem('tkedufre', response.tk);
             this.servicioBackend.token = response.tk;
             this.servicioBackend.isAutenticate = true;
 
-            this.router.navigate(['/admin-usuarios']);
+            this.router.navigate(['/admin/admin-usuarios']);
 
           } else {
             alert('Las credenciales son incorrectas');

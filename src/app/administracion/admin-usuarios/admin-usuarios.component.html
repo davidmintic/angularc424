@@ -7,8 +7,8 @@
         <button type="button" (click)="iniciarCreacion()" class="btn btn-warning me-2 cls-button-crud">Crear
             usuario</button>
 
-        <select name="" id="" [(ngModel)]="selectTipoUsuario" class="form-select cls-select-filter"
-            aria-placeholder="Tipo de usuario">
+        <select name="" id="" [(ngModel)]="selectTipoUsuario" (change)="filtrarUsuarioPorTipo()"
+            class="form-select cls-select-filter" aria-placeholder="Tipo de usuario">
 
             <option [value]="tipo.codigo" *ngFor="let tipo of opcionesTipoUsuaurio">
                 {{ tipo.texto }}
@@ -17,7 +17,8 @@
         </select>
 
         <div class="mb-3 me-3 cls-buscar">
-            <input type="text" class="form-control" placeholder="Buscar" aria-describedby="emailHelp">
+            <input type="text" class="form-control" [(ngModel)]="textoFiltro" (ngModelChange)="filtrarPorTexto()"
+                placeholder="Buscar" aria-describedby="emailHelp">
         </div>
 
     </section>
@@ -40,10 +41,12 @@
             </div>
 
             <button *ngIf="modoCrud == 'adicion'" [disabled]="!formUsuario.valid" type="submit"
-                class="btn btn-warning cls-boton-guardar" (click)="crearUsuario()"><i class="fa fa-plus"></i> Guardar adición</button>
+                class="btn btn-warning cls-boton-guardar" (click)="crearUsuario()"><i class="fa fa-plus"></i> Guardar
+                adición</button>
 
             <button *ngIf="modoCrud == 'edicion'" [disabled]="!formUsuario.valid" type="submit"
-                class="btn btn-primary cls-boton-guardar" (click)="editarUsuario()"><i class="fa fa-pencil"></i> Guardar edición</button>
+                class="btn btn-primary cls-boton-guardar" (click)="editarUsuario()"><i class="fa fa-pencil"></i> Guardar
+                edición</button>
 
         </form>
     </section>

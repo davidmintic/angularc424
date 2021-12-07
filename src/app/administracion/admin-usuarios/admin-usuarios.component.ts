@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { GlobalService } from '../servicios/global.service';
+import { GlobalService } from '../../servicios/global.service';
 import Swal from 'sweetalert2';
 import { FormBuilder, Validators } from '@angular/forms';
-import { BackendSevicioService } from '../servicios/backend-sevicio.service';
+import { BackendSevicioService } from '../../servicios/backend-sevicio.service';
 
 
 @Component({
@@ -16,6 +16,11 @@ export class AdminUsuariosComponent implements OnInit {
   openNewUser = false;
   formUsuario: any;
   opcionesTipoUsuaurio = [
+
+    {
+      codigo: '',
+      texto: 'Todos',
+    },
     {
       codigo: 'Docente',
       texto: 'Docente',
@@ -37,9 +42,12 @@ export class AdminUsuariosComponent implements OnInit {
 
   selectTipoUsuario = 'Estudiante';
   listaUsuarios: any[] = [];
-
+  listaTodosUsuarios: any[] = [];
   modoCrud = 'adicion';
   idActual = '';
+
+
+  textoFiltro = '';
 
 
   constructor(
@@ -73,6 +81,7 @@ export class AdminUsuariosComponent implements OnInit {
   obtenerUsuarios(): void {
     this.servicioBackend.getDatos('/usuarios').subscribe({
       next: (datos) => {
+        this.listaTodosUsuarios = datos;
         this.listaUsuarios = datos;
       },
       error: () => {
@@ -94,6 +103,17 @@ export class AdminUsuariosComponent implements OnInit {
 
   crearUsuario(): void {
 
+    if (!this.selectTipoUsuario) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Seleccione un tipo de usuario válido para crear un usuario.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+
+      return;
+    }
+
     const usuario = this.formUsuario.getRawValue();
     usuario.tipo = this.selectTipoUsuario;
     this.servicioBackend.postDatos('/usuarios', JSON.stringify(usuario)).subscribe(
@@ -105,16 +125,17 @@ export class AdminUsuariosComponent implements OnInit {
             title: 'Felicidades',
             text: 'Has creado un nuevo usuario',
             icon: 'success',
-            confirmButtonText: 'Cool'
+            confirmButtonText: 'Ok'
           });
           this.obtenerUsuarios();
+          this.formUsuario.reset();
         },
         error: () => {
           Swal.fire({
             title: 'Error!',
             text: 'No se pudo agregar',
             icon: 'error',
-            confirmButtonText: 'Cool'
+            confirmButtonText: 'Ok'
           });
         },
 
@@ -171,7 +192,7 @@ export class AdminUsuariosComponent implements OnInit {
 
 
   eliminarUsuario(id: string) {
-    
+
     this.servicioBackend.deleteDatos('/usuarios', id).subscribe(
       {
         next: (respuesta) => {
@@ -199,6 +220,43 @@ export class AdminUsuariosComponent implements OnInit {
         }
       }
     );
+  }
+
+
+  filtrarUsuarioPorTipo(): void {
+
+    if (this.selectTipoUsuario) {
+      const usuariosFiltradosPorTipo = this.listaTodosUsuarios.filter((usuario) => usuario.tipo == this.selectTipoUsuario);
+      if (usuariosFiltradosPorTipo) {
+        this.listaUsuarios = usuariosFiltradosPorTipo;
+      }
+    } else {
+      this.listaUsuarios = this.listaTodosUsuarios;
+    }
+  }
+
+  filtrarPorTexto(): void {
+
+    const usuariosFiltrados = this.listaTodosUsuarios.filter((usuario) => {
+      let coincide = false;
+
+      for (const atributo in usuario) {
+
+        if (atributo == 'id') {
+          continue;
+        }
+
+        const valor = (usuario[atributo] + '').toLowerCase();
+        if (valor.includes(this.textoFiltro.toLowerCase())) {
+          coincide = true;
+          break;
+        }
+      }
+      return coincide;
+    });
+
+
+    this.listaUsuarios = usuariosFiltrados;
   }
 
 

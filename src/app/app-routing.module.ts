@@ -1,25 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminUsuariosComponent } from './admin-usuarios/admin-usuarios.component';
-import { LoginComponent } from './login/login.component';
-import { ProgramasEnOfertaComponent } from './programas-en-oferta/programas-en-oferta.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    redirectTo: 'admin',
+    pathMatch: 'full'
   },
   {
-    path: 'login',
-    component: LoginComponent
+    path: 'sesion',
+    loadChildren: () => import('./sesion/sesion.module').then(m => m.SesionModule)
   },
   {
-    path: 'admin-usuarios',
-    component: AdminUsuariosComponent
+    path: 'admin',
+    loadChildren: () => import('./administracion/administracion.module').then(m => m.AdministracionModule)
   },
   {
-    path: 'programas-en-oferta',
-    component: ProgramasEnOfertaComponent
+    path: 'estudiantes',
+    loadChildren: () => import('./estudiantes/estudiantes.module').then(m => m.EstudiantesModule)
   }
 ];
 

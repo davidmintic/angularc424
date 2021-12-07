@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BackendSevicioService } from '../servicios/backend-sevicio.service';
-import { GlobalService } from '../servicios/global.service';
+import { BackendSevicioService } from '../../servicios/backend-sevicio.service';
+import { GlobalService } from '../../servicios/global.service';
 
 interface Programa {
   imagen: string,

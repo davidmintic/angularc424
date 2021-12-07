@@ -22,16 +22,16 @@ export class AppComponent {
 
   routeLogin(): void{
     this.servicioBackend.cerrarSesion();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/sesion/login']);
   }
 
   routeProgramas(): void{
-    this.router.navigate(['/programas-en-oferta']);
+    this.router.navigate(['/estudiantes/programas-en-oferta']);
   }
 
 
   routeAdminUsuarios(): void{
-    this.router.navigate(['/admin-usuarios']);
+    this.router.navigate(['/admin/admin-usuarios']);
   }
 
 }
