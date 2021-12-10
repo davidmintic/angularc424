@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -47,6 +47,24 @@ export class BackendSevicioService {
     );
   }
 
+  getDatosFiltro(ruta: string, filtro: string): Observable<any> {
+
+
+    const parametroFiltro = new HttpParams().append('filter', filtro);
+
+    return this.http.get(
+      this.urlBackend + ruta,
+      {
+        headers: new HttpHeaders(
+          {
+            'Authorization': `Bearer ${this.token}`
+          }
+        ),
+        params: parametroFiltro
+      }
+    );
+  }
+
 
   postDatos(ruta: string, datos: string): Observable<any> {
 
@@ -64,7 +82,7 @@ export class BackendSevicioService {
   }
 
 
-  
+
   patchDatos(ruta: string, id: string, datos: string): Observable<any> {
 
     return this.http.patch(

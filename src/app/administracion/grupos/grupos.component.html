@@ -1,0 +1,130 @@
+<div class="p-5">
+
+    <section class="mb-4 d-flex flex-row" style="position: relative;" *ngIf="templateActual != 'grupos'">
+        <button type="button" (click)="volverTemplate()" class="btn btn-warning me-2 cls-button-crud">
+            Volver</button>
+        <span>
+            {{migaPan}}
+        </span>
+    </section>
+
+    <section>
+
+
+        <ng-container *ngIf="templateActual == 'grupos'">
+            <ng-container *ngTemplateOutlet="templateGrupos">
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="templateActual == 'usuariosgrupo'">
+            <ng-container *ngTemplateOutlet="templateUsuarios">
+            </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="templateActual == 'calificaciones'">
+            <ng-container *ngTemplateOutlet="templateCalificaciones">
+            </ng-container>
+        </ng-container>
+
+    </section>
+
+</div>
+
+
+
+
+<ng-template #templateGrupos>
+
+    <table class="table table-hover">
+        <thead>
+            <td>
+                Nombre
+            </td>
+            <td>
+                Acciones
+            </td>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grupo of listaGrupos">
+                <td>
+                    {{grupo.nombre}}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" (click)="verEstudiantes(grupo)">Ver
+                        estudiantes</button>
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</ng-template>
+
+
+<ng-template #templateUsuarios>
+
+    <table class="table table-hover">
+        <thead>
+
+            <td>
+                Nombre
+            </td>
+            <td>
+                Correo
+            </td>
+            <td>
+                Tipo
+            </td>
+            <td>
+                Acciones
+            </td>
+        </thead>
+        <tbody>
+            <tr *ngFor="let usuario of listaUsuarios">
+                <td>
+                    {{usuario.nombre}}
+                </td>
+                <td>
+                    {{usuario.codigo}}
+                </td>
+                <td>
+                    {{usuario.tipo}}
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" (click)="verCalificaciones(usuario)">
+                        Ver calificaciones
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</ng-template>
+
+<ng-template #templateCalificaciones>
+
+    <table class="table table-hover">
+        <thead>
+
+            <td>
+                #
+            </td>
+            <td>
+                Nota
+            </td>
+        </thead>
+        <tbody>
+            <tr *ngFor="let calificacion of listaCalificaciones; let i = index">
+                <td>
+                    Calificación {{i+1}}
+                </td>
+                <td>
+                    {{calificacion.nota}}
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+</ng-template>
