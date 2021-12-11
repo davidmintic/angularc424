@@ -51,14 +51,9 @@ export class LoginComponent implements OnInit {
 
 
     console.log('entró al ngOnInit');
-
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.servicioGlobal.rutaActual = "login";
-    });
-  }
+  ngAfterViewInit(): void {}
 
   autenticar(): void {
 
@@ -80,11 +75,17 @@ export class LoginComponent implements OnInit {
               icon: 'success',
               confirmButtonText: 'Ok'
             });
+
+            const perfil = response.data.perfil;
+
             localStorage.setItem('tkedufre', response.tk);
+            localStorage.setItem('perfil', JSON.stringify(perfil));
+
+            this.servicioGlobal.actualizarMenu(perfil.menu);
             this.servicioBackend.token = response.tk;
             this.servicioBackend.isAutenticate = true;
 
-            this.router.navigate(['/admin/admin-usuarios']);
+            this.router.navigate([perfil.rutaInicio]);
 
           } else {
             alert('Las credenciales son incorrectas');

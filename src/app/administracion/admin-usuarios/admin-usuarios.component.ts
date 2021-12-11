@@ -71,11 +71,7 @@ export class AdminUsuariosComponent implements OnInit {
 
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.servicioGlobal.rutaActual = "admin-usuarios";
-    });
-  }
+  ngAfterViewInit(): void {}
 
 
   obtenerUsuarios(): void {

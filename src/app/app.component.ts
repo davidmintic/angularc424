@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { BackendSevicioService } from './servicios/backend-sevicio.service';
 import { GlobalService } from './servicios/global.service';
 
@@ -15,22 +15,29 @@ export class AppComponent {
     public servicioGlobal: GlobalService,
     public servicioBackend: BackendSevicioService,
     private router: Router
-    ){
-    const ruta = this.servicioGlobal.rutaActual;
+  ) {
+
+
+    router.events.subscribe((val) => {
+      // see also 
+      if(val instanceof NavigationEnd) {
+          this.servicioGlobal.rutaActual = val.url;
+      }
+    });
   }
 
 
-  routeLogin(): void{
+  routeLogin(): void {
     this.servicioBackend.cerrarSesion();
     this.router.navigate(['/sesion/login']);
   }
 
-  routeProgramas(): void{
+  routeProgramas(): void {
     this.router.navigate(['/estudiantes/programas-en-oferta']);
   }
 
 
-  routeAdminUsuarios(): void{
+  routeAdminUsuarios(): void {
     this.router.navigate(['/admin/admin-usuarios']);
   }
 

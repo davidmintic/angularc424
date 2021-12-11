@@ -20,6 +20,7 @@ export class BackendSevicioService {
     this.token = '';
     this.isAutenticate = false;
     localStorage.removeItem('tkedufre');
+    localStorage.removeItem('perfil');
   }
 
 
